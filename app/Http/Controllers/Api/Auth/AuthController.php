@@ -12,10 +12,19 @@ class AuthController extends Controller
     //Login
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
+        if(!filter_var($request->email, FILTER_VALIDATE_EMAIL)){
+            $request->merge([
+                'username' => $request->email, 
+                'email' => null
+            ]);
+        }
+
+        $loginField = !empty($request->username) ? 'username' : 'email';
+
+        $credentials = $request->only($loginField, 'password');
 
         if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->unauthorized('Invalid Username or Password');
         }
 
         return $this->respondWithToken($token);
@@ -40,15 +49,5 @@ class AuthController extends Controller
     {
         return $this->respondWithToken(Auth::refresh(), 'Refresh Token');
     }
-
-    //Respond With Token
-    protected function respondWithToken($token, $msg = 'Login Successfully')
-    {
-        return $this->ok($msg,
-        [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
-        ]);
-    }
+    
 }

@@ -17,9 +17,7 @@ class PermissionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->randomElement(['create' , 'read', 'update', 'delete', 'restore']),
-            'ability' => fake()->randomElement(['can:create', 'can:read', 'can:update', 'can:delete', 'can:restore']),
-            'label' => fake()->randomElement(['Can Create', 'Can Read', 'Can Update', 'Can Delete', 'Can Restore'])
+
         ];
     }
 }

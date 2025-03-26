@@ -26,7 +26,6 @@ class ForgotPasswordController extends Controller
     private function updateOrCreateResetToken(string $email, string $hashedToken){
 
         DB::table('password_reset_tokens')
-        ->where('email', $email)
         ->updateOrInsert(
             ['email' => $email],
             [
