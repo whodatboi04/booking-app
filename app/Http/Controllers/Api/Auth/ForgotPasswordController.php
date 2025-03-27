@@ -17,21 +17,21 @@ class ForgotPasswordController extends Controller
 
     protected $dateNow;
 
-    public function __construct()
-    {
-        $this->dateNow = Carbon::now('asia/manila');
-    }
+    // public function __construct()
+    // {
+    //     $this->dateNow = Carbon::now('asia/manila');
+    // }
 
     //Update or Create Reset Token
     private function updateOrCreateResetToken(string $email, string $hashedToken){
-
         DB::table('password_reset_tokens')
+        ->where('email', $email)
         ->updateOrInsert(
             ['email' => $email],
             [
                 'token' => $hashedToken, 
-                'created_at' =>  $this->dateNow, 
-                'expires_in' => $this->dateNow->copy()->addMinutes(2)
+                'created_at' =>  time_now(), 
+                'expires_in' => time_now()->copy()->addMinutes(2)
             ]
         );
 
