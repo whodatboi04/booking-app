@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('birthdate')->nullable();
             $table->string('profile_picture')->default('user-avatar.jpg');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

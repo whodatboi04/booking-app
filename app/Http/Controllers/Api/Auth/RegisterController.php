@@ -15,7 +15,6 @@ class RegisterController extends Controller
 
         $user = User::create($request->validated());
         UserInfo::create(array_merge(
-            $request->validated(),
                 ['user_id' => $user->id]
             ));
 
