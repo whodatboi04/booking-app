@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Http\Permission\v1\Abilities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,10 +56,19 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        
+        $abilities = Abilities::getAbilities($this);
+
+        return [
+            'abilities' => $abilities, 
+        ];
     }
 
     public function user_info(){
         return $this->hasOne(UserInfo::class);
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class, 'user_role')->withTimestamps();
     }
 }

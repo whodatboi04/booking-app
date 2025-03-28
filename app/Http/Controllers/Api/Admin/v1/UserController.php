@@ -6,12 +6,30 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\UserRequest;
 use App\Http\Resources\Api\v1\UserInfoResource;
 use App\Http\Resources\Api\v1\UserResource;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Policies\UserPolicy;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    protected $policyClass = UserPolicy::class;
+
+    //Set User Role 
+    private function setUserRole(array $roles, $user){
+        $rolesArr = [];
+        foreach($roles as $role){
+            $roles = Role::where('id', $role)->first();
+            $rolesArr[] = $roles->id;
+        }
+
+        $user->roles()->sync($rolesArr);
+        $user->roles;
+
+        return $user;
+    }
+
     //Get All Users
     public function getAllUsers(){
         
@@ -23,10 +41,10 @@ class UserController extends Controller
 
     //Store User
     public function storeUsers(UserRequest $request){
+        
+        $user = User::create($request->validated());
 
-        $user = User::create(array_merge(
-            $request->validated(),
-        ));
+        $this->setUserRole($request->roles, $user);
 
         UserInfo::create(array_merge(
             ['user_id' => $user->id] 
@@ -36,10 +54,17 @@ class UserController extends Controller
 
     }
 
+    //Show User 
+    public function showUser(User $user){
+        return new UserResource($user);
+    }
+
     //Update User
     public function updateUsers(UserRequest $request, User $user){
 
+        $this->isAble('update', $user);
         $user->update($request->validated());
+        $this->setUserRole($request->roles, $user);
         return $this->ok('Updated Successfully');
 
     }
