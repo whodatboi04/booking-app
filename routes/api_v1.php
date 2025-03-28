@@ -18,6 +18,7 @@ Route::group([
         Route::get('', [UserController::class, 'getAllUsers'])->name('users');
         Route::post('', [UserController::class, 'storeUsers'])->name('users.store');
         Route::put('{user}', [UserController::class, 'updateUsers'])->name('users.update');
+        Route::get('{user}', [UserController::class, 'showUser'])->name('users.show');
         
         //Delete Users
         Route::delete('{user}', [UserController::class, 'deleteUsers'])->name('users.delete');
@@ -32,6 +33,7 @@ Route::group([
         'prefix' => 'permission'
     ], function (){
         Route::post('{role}', [PermissionRoleController::class, 'setPermissionRole'])->name('permission-role.set');
+        Route::get('{role}', [PermissionRoleController::class, 'showRolePermissions'])->name('permission-role.show');
     });
 
 });
