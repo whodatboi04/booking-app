@@ -7,3 +7,4 @@ if(!function_exists('time_now')){
         return Carbon::now($local);
     }
 }
+

@@ -10,7 +10,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserInfo;
 use App\Policies\UserPolicy;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -33,6 +33,7 @@ class UserController extends Controller
     //Get All Users
     public function getAllUsers(){
         
+        $this->isAble('read', Auth::user());
         $users = UserInfoResource::collection(UserInfo::all());
 
         return $this->ok('Users', $users);
@@ -41,14 +42,15 @@ class UserController extends Controller
 
     //Store User
     public function storeUsers(UserRequest $request){
-        
+
+        $this->isAble('create', Auth::user());
         $user = User::create($request->validated());
-
-        $this->setUserRole($request->roles, $user);
-
         UserInfo::create(array_merge(
             ['user_id' => $user->id] 
         ));
+
+        $this->isAble('assign', Auth::user());
+        $this->setUserRole($request->roles, $user);
 
         return $this->created('User Created Successfully', $user);
 
@@ -56,6 +58,7 @@ class UserController extends Controller
 
     //Show User 
     public function showUser(User $user){
+        $this->isAble('read', $user);
         return new UserResource($user);
     }
 
@@ -63,8 +66,10 @@ class UserController extends Controller
     public function updateUsers(UserRequest $request, User $user){
 
         $this->isAble('update', $user);
+
         $user->update($request->validated());
         $this->setUserRole($request->roles, $user);
+        
         return $this->ok('Updated Successfully');
 
     }
@@ -72,6 +77,7 @@ class UserController extends Controller
     //Soft Delete Users
     public function deleteUsers(User $user){
 
+        $this->isAble('delete', $user);
         $userInfo = UserInfo::where('user_id', $user->id)->first();
         $user->delete();
         $userInfo->delete();
@@ -81,6 +87,7 @@ class UserController extends Controller
 
     //Get All Deleted Users
     public function getAllDeletedUsers(){
+        $this->isAble('read', Auth::user());
         return UserInfoResource::collection(UserInfo::onlyTrashed()->get());
     }
 

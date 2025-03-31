@@ -59,5 +59,4 @@ trait ApiResponse
         $response['success'] = $statusCode < 400 ? true : false;
         return response()->json($response, $statusCode);
     }
-
 }

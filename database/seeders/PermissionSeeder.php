@@ -19,6 +19,9 @@ class PermissionSeeder extends Seeder
             ['name' => 'update', 'ability' => 'can:update', 'label' => 'CAN UPDATE'],
             ['name' => 'delete', 'ability' => 'can:delete', 'label' => 'CAN DELETE'],
             ['name' => 'restore', 'ability' => 'can:restore', 'label' => 'CAN RESTORE'],
+            ['name' => 'assign', 'ability' => 'can:assign', 'label' => 'CAN ASSIGN'],
+            ['name' => 'accept-payment', 'ability' => 'can:accept-payment', 'label' => 'CAN ACCEPT PAYMENT'],
+            ['name' => 'decline-payment', 'ability' => 'can:decline-payment', 'label' => 'CAN DECLINE PAYMENT'],
         ];
 
         foreach($permissions as $permission){

@@ -17,12 +17,12 @@ Route::group([
     ], function (){
         Route::get('', [UserController::class, 'getAllUsers'])->name('users');
         Route::post('', [UserController::class, 'storeUsers'])->name('users.store');
+        Route::get('/deleted', [UserController::class, 'getAllDeletedUsers'])->name('users.delete.index');
         Route::put('{user}', [UserController::class, 'updateUsers'])->name('users.update');
         Route::get('{user}', [UserController::class, 'showUser'])->name('users.show');
         
         //Delete Users
         Route::delete('{user}', [UserController::class, 'deleteUsers'])->name('users.delete');
-        Route::get('/deleted', [UserController::class, 'getAllDeletedUsers'])->name('users.delete.index');
         Route::get('{user}/restore', [UserController::class, 'restoreDeletedUsers'])->name('users.restore');
         Route::delete('{user}/delete', [UserController::class, 'deleteUsersPermanently'])->name('users.delete.permanently');
 
@@ -34,6 +34,7 @@ Route::group([
     ], function (){
         Route::post('{role}', [PermissionRoleController::class, 'setPermissionRole'])->name('permission-role.set');
         Route::get('{role}', [PermissionRoleController::class, 'showRolePermissions'])->name('permission-role.show');
+        Route::get('', [PermissionRoleController::class, 'authUserPermission'])->name('permission-role.getUser');
     });
 
 });

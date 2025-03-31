@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 abstract class Controller
 {
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
     protected $policyClass;
 
     //Respond With Token
@@ -37,6 +38,6 @@ abstract class Controller
     }
 
     public function isAble($ability, $targetModel){
-        return Gate::authorize($ability, [$targetModel, $this->policyClass]);
+        return $this->authorize($ability, [$targetModel, $this->policyClass]);
     }
 }

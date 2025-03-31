@@ -55,10 +55,8 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function getJWTCustomClaims()
-    {
-        
-        $abilities = Abilities::getAbilities($this);
-
+    {     
+        $abilities = Abilities::getPermissions($this);
         return [
             'abilities' => $abilities, 
         ];
@@ -70,5 +68,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function roles(){
         return $this->belongsToMany(Role::class, 'user_role')->withTimestamps();
+    }
+
+    //Check User Permission
+    public function hasPermission($permission){
+        $userAbilities = Abilities::getPermissions($this);
+        return in_array($permission,  $userAbilities) ? true : false;
     }
 }
