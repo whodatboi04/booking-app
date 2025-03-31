@@ -28,7 +28,11 @@ class UserRequest extends FormRequest
                 'username' => ['required', 'string', 'unique:users,username'],
                 'email' => ['required', 'string', 'email', 'unique:users,email'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
-                'password_confirmation' => ['required', 'string']
+                'password_confirmation' => ['required', 'string'],
+                //Roles Object
+                'roles.superadmin' => ['nullable', 'integer'],
+                'roles.admin' => ['nullable', 'integer'],
+                'roles.user' => ['nullable', 'integer']
             ];
         }
 
@@ -36,7 +40,11 @@ class UserRequest extends FormRequest
             return [
                 'username' => ['sometimes', 'string', 'unique:users,username'],
                 'email' => ['sometimes', 'string', 'email', 'unique:users,email'],
-                'password' => ['sometimes', 'string', 'min:8', 'confirmed']
+                'password' => ['sometimes', 'string', 'min:8', 'confirmed'],
+                //Roles Object
+                'roles.superadmin' => ['nullable', 'integer'],
+                'roles.admin' => ['nullable', 'integer'],
+                'roles.user' => ['nullable', 'integer']
             ];
         }
 

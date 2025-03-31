@@ -10,6 +10,10 @@ class Role extends Model
     use HasFactory;
 
     public function permissions(){
-        return $this->belongToMany(Permission::class, 'permission_role')->withTimestamps();
+        return $this->belongsToMany(Permission::class, 'permission_role')->withTimestamps();
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class, 'user_role')->withTimestamps();
     }
 }
