@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Gate;
 abstract class Controller
 {
     use ApiResponse, AuthorizesRequests;
-    protected $policyClass;
 
     //Respond With Token
     protected function respondWithToken($token, $msg = 'Login Successfully')
@@ -35,9 +34,5 @@ abstract class Controller
         $includeValues = explode(',', strtolower($param));
 
         return in_array(strtolower($relation), $includeValues);
-    }
-
-    public function isAble($ability, $targetModel){
-        return $this->authorize($ability, [$targetModel, $this->policyClass]);
     }
 }
