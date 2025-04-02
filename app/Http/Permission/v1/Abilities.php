@@ -7,8 +7,8 @@ use App\Models\User;
 
 class Abilities {
 
-    public static function getAbilities(User $user){
-        $userRoles = $user->roles;  
+    private static function getUserPermissions($user, $column){
+        $userRoles = $user->roles;
         $permissions = [];
 
         foreach($userRoles as $userRole){
@@ -17,12 +17,20 @@ class Abilities {
                 return response()->json('No Record', 404);
             }
             foreach($rolePermissions as $rolePermission){
-                $permissions[] = $rolePermission->ability;
+                $permissions[] = $rolePermission->$column;
             }
         }
 
         $permissions = array_unique($permissions);
         return $permissions;
+    }
+
+    public static function getPermissions(User $user){
+        return SELF::getUserPermissions($user, 'ability');
+    }
+
+    public static function getPermissionLabel(User $user){
+        return SELF::getUserPermissions($user, 'label');
     }
 
 }
