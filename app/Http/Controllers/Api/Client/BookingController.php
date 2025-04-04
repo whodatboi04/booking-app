@@ -18,7 +18,14 @@ class BookingController extends Controller
 
     //Store Booking Appoinement
     public function storeBookingAppoinement(BookingRequest $request){
+
         $book = $this->bookingService->bookAppointmentService($request);
-        return $book;
+
+        if(!$book){
+            return $this->badRequest('Room Type is Fully Booked');
+        }
+        
+        return $this->created('Booked Successfully', $book);
+
     }
 }

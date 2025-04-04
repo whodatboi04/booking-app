@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\v1\ManageBookingController;
 use App\Http\Controllers\Api\Admin\v1\UserController;
 use App\Http\Controllers\Api\Admin\v1\PermissionRoleController;
 use App\Http\Controllers\Api\Client\BookingController;
@@ -42,7 +43,15 @@ Route::group([
     Route::group([
         'prefix' => 'booking'
     ], function (){
-        Route::post('', [BookingController::class, 'storeBookingAppoinement'])->name('booking.store');
+        //Client Booking Route
+        Route::post('', [BookingController::class, 'storeBookingAppoinement'])->name('client.booking.store');
+
+        //Admin Booking Route
+        Route::group([
+            'prefix' => 'admin'
+        ], function() {
+            Route::put('{book}', [ManageBookingController::class, 'assignClientRoom'])->name('admin.booking.assign');
+        });
     });
 
 });

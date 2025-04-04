@@ -22,10 +22,18 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'room_id' => ['required', 'integer'],
+            'room_type_id' => ['required', 'integer'],
             'discount_id' => ['nullable', 'numeric'],
-            'start_date' => ['required', 'date', 'before_or_equal:end_date'],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date']
+            'start_date' => ['required', 'date', 'before_or_equal:end_date', 'after:'.time_now()],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date', 'after:'.time_now()]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'start_date.after' => 'You must enter start date after the current date',
+            'end_date.after' => 'You must enter end date after the current date',
         ];
     }
 }
