@@ -30,52 +30,59 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (Exception $e, Request $request) {
-            if($request->is('api/*')) {
-                if($e instanceof InvalidOrderException ){
-                    return response()->json([
-                        'message' => $e->getMessage(),
-                        'status'  => false,
-                    ], 500);
-                }
-                if($e instanceof AuthorizationException ){
-                    return response()->json([
-                        'message' => $e->getMessage(),
-                        'status'  => false
-                    ], 401);
-                }
-                if($e instanceof AccessDeniedHttpException ){
-                    return response()->json([
-                        'message' => $e->getMessage(),
-                        'status'  => false
-                    ], 401);
-                }
-                if($e instanceof CommandNotFoundException ){
-                    return response()->json([
-                        'message' => $e->getMessage(),
-                        'status'  => false
-                    ], 404);
-                }
+            if ($request->is('api/*')) {
+                $exceptionMap = [
+                    InvalidOrderException::class => [
+                        'message' => 'The order you placed is invalid or cannot be processed at this time.',
+                        'status' => 500
+                    ],
+                    AuthorizationException::class => [
+                        'message' => 'You are not authorized to perform this action. Please check your permissions.',
+                        'status' => 401
+                    ],
+                    AccessDeniedHttpException::class => [
+                        'message' => 'Access denied. You do not have the required privileges to access this resource.',
+                        'status' => 401
+                    ],
+                    CommandNotFoundException::class => [
+                        'message' => 'The specified command could not be found. Please verify the command name.',
+                        'status' => 404
+                    ],
+                    MethodNotAllowedHttpException::class => [
+                        'message' => 'The request method is not allowed for this endpoint. Please check the API documentation.',
+                        'status' => 405
+                    ],
+                    JWTException::class => [
+                        'message' => 'Your token is missing, expired, or invalid. Please log in again.',
+                        'status' => 401
+                    ],
+                    NotFoundHttpException::class => [
+                        'message' => 'The resource you’re trying to access doesn’t exist.',
+                        'status' => 404
+                    ],
+                ];    
+                foreach ($exceptionMap as $class => $details) {
+                    if ($e instanceof $class) {
+                        $response = [
+                            'message' => $details['message'],
+                            'status'  => $details['status'],
+                            'success'  => $details['status'] < 400 ? true : false,
+                        ];
 
-                if($e instanceof MethodNotAllowedHttpException ){
-                    return response()->json([
-                        'message' => 'Method not allowed',
-                        'status'  => false
-                    ], 405);
+                        if (config('app.env') === 'local') {
+                            $response['error'] = $e->getMessage();
+                        }
+                        return response()->json($response, $details['status']);
+                    }
                 }
-
-                if($e instanceof NotFoundHttpException){
-                    return response()->json([
-                        'message' => 'Request not found.',
-                        'status'  => false
-                    ], 404);
+                $response = [
+                    'message' => 'An unexpected error occurred. Please try again later.',
+                    'status'  => false,
+                ];
+                if (config('app.env') === 'local') {
+                    $response['error'] = $e->getMessage();
                 }
-
-                if($e instanceof JWTException){
-                    return response()->json([
-                        'message' => 'Unauthorize.',
-                        'status'  => false
-                    ], 404);
-                }
+                return response()->json($response, 500);
             }
         });
     })->create();
