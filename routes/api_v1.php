@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\v1\ManageBookingController;
 use App\Http\Controllers\Api\Admin\v1\UserController;
 use App\Http\Controllers\Api\Admin\v1\PermissionRoleController;
+use App\Http\Controllers\Api\Client\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,8 +25,8 @@ Route::group([
         
         //Delete Users
         Route::delete('{user}', [UserController::class, 'deleteUsers'])->name('users.delete');
-        Route::get('{user}/restore', [UserController::class, 'restoreDeletedUsers'])->name('users.restore');
         Route::delete('{user}/delete', [UserController::class, 'deleteUsersPermanently'])->name('users.delete.permanently');
+        Route::put('{user}/restore', [UserController::class, 'restoreDeletedUsers'])->name('users.restore');
 
     });
 
@@ -35,6 +37,21 @@ Route::group([
         Route::post('{role}', [PermissionRoleController::class, 'setPermissionRole'])->name('permission-role.set');
         Route::get('{role}', [PermissionRoleController::class, 'showRolePermissions'])->name('permission-role.show');
         Route::get('', [PermissionRoleController::class, 'authUserPermission'])->name('permission-role.getUser');
+    });
+
+    //Booking
+    Route::group([
+        'prefix' => 'booking'
+    ], function (){
+        //Client Booking Route
+        Route::post('', [BookingController::class, 'storeBookingAppoinement'])->name('client.booking.store');
+
+        //Admin Booking Route
+        Route::group([
+            'prefix' => 'admin'
+        ], function() {
+            Route::put('{book}', [ManageBookingController::class, 'assignClientRoom'])->name('admin.booking.assign');
+        });
     });
 
 });

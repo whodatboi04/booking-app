@@ -62,12 +62,19 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    //User Information Relationship 
     public function user_info(){
         return $this->hasOne(UserInfo::class);
     }
 
+    //Role Relationship
     public function roles(){
         return $this->belongsToMany(Role::class, 'user_role')->withTimestamps();
+    }
+
+    //Booking Relationship
+    public function bookings(){
+        return $this->hasMany(Booking::class);
     }
 
     //Check User Permission
