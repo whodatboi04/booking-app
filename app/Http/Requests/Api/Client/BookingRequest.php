@@ -21,6 +21,8 @@ class BookingRequest extends FormRequest
      */
     public function rules(): array
     {
+        
+
         return [
             'room_type_id' => ['required', 'integer'],
             'discount_id' => ['nullable', 'numeric'],

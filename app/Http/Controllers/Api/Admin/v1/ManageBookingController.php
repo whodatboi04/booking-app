@@ -10,12 +10,10 @@ use Illuminate\Http\Request;
 
 class ManageBookingController extends Controller
 {
-    protected $manageBookingService; 
-
-    public function __construct()
-    {
-        $this->manageBookingService = new ManageBookingService;
-    }
+    public function __construct(
+        protected ManageBookingService $manageBookingService
+    )
+    {}
     
     //Assign Client Room
     public function assignClientRoom(ManageBookingRequest $request, Booking $book){

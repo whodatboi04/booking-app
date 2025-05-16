@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\Admin\v1\ManageBookingController;
 use App\Http\Controllers\Api\Admin\v1\UserController;
 use App\Http\Controllers\Api\Admin\v1\PermissionRoleController;
 use App\Http\Controllers\Api\Client\BookingController;
+use App\Http\Controllers\Api\Client\RoomController;
+use App\Http\Controllers\Api\Client\RoomTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +56,15 @@ Route::group([
         });
     });
 
+});
+
+//PUBLIC ROUTE
+Route::group([
+    'prefix' => '/'
+], function () {
+      //Room Types
+      Route::get('room-types', [RoomTypeController::class, 'roomTypesIndex'])->name('client.room-types.index');
+        
 });
 
 
