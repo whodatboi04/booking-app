@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Client\BookingRequest;
+use App\Models\Booking;
 use App\Services\Api\Client\v1\BookingService;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class BookingController extends Controller
     {
         $this->bookingService = new BookingService;
     }
-
+    
     //Store Booking Appoinement
     public function storeBookingAppoinement(BookingRequest $request){
 

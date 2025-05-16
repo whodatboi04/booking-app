@@ -30,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (Exception $e, Request $request) {
-            if ($request->is('api/*')) {
+            if ($request->is('api/auth/*')) {
                 $exceptionMap = [
                     InvalidOrderException::class => [
                         'message' => 'The order you placed is invalid or cannot be processed at this time.',

@@ -28,9 +28,9 @@ class UserController extends Controller
     }
 
     //Get All Users
-    public function getAllUsers(){
+    public function getAllUsers(User $user){
         
-        $this->authorize('read', User::class);
+        $this->authorize('read', $user);
         $users = UserInfoResource::collection(UserInfo::all());
 
         return $this->ok('Users', $users);
@@ -38,10 +38,10 @@ class UserController extends Controller
     }
 
     //Store User
-    public function storeUsers(UserRequest $request){
+    public function storeUsers(UserRequest $request, User $user){
 
-        $this->authorize('create', User::class);
-        $user = User::create($request->validated());
+        $this->authorize('create', $user);
+        $user = $user->create($request->validated());
         UserInfo::create(array_merge(
             ['user_id' => $user->id] 
         ));
@@ -62,7 +62,7 @@ class UserController extends Controller
     //Update User
     public function updateUsers(UserRequest $request, User $user){
 
-        $this->authorize('update', User::class);
+        $this->authorize('update', $user);
 
         $user->update($request->validated());
         $this->setUserRole($request->roles, $user);
@@ -74,7 +74,7 @@ class UserController extends Controller
     //Soft Delete Users
     public function deleteUsers(User $user){
         
-            $this->authorize('delete', User::class);
+            $this->authorize('delete', $user);
             $userInfo = UserInfo::where('user_id', $user->id)->first();
             $user->delete();
             $userInfo->delete();
@@ -89,10 +89,10 @@ class UserController extends Controller
     }
 
     //Restore Deleted Users
-    public function restoreDeletedUsers(string $user){
+    public function restoreDeletedUsers(User $user){
 
-        $this->authorize('restore', User::class);
-        $user = User::onlyTrashed()->find($user);
+        $this->authorize('restore', $user);
+        $user = $user->onlyTrashed()->find($user);
 
         if(!$user){
             return $this->notFound('User not found or not deleted');
@@ -107,11 +107,11 @@ class UserController extends Controller
     }
 
     //Delete Users Permanently
-    public function deleteUsersPermanently(string $user){
+    public function deleteUsersPermanently(User $user){
 
-        $this->authorize('delete', User::class);
+        $this->authorize('delete', $user);
 
-        $user = User::onlyTrashed()->find($user);
+        $user = $user->onlyTrashed()->find($user);
         if(!$user){
             return $this->notFound('User Not Found in Trash');
         }
