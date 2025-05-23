@@ -12,20 +12,26 @@ use Illuminate\Support\Facades\Auth;
 class RegisterController extends Controller
 {
     public function register(RegisterRequest $request){
+        try {
+            throw \Exception;
+            $user = User::create($request->validated());
+            UserInfo::create(array_merge(
+                    ['user_id' => $user->id]
+                ));
+    
+            Auth::login($user);
+    
+            $token = Auth::attempt($request->only('email', 'password'));
+    
+             if (!$token) {
+                return $this->serverError('Failed to generate token');
+            }
+    
+            return $this->respondWithToken($token, 'Registration successful');
 
-        $user = User::create($request->validated());
-        UserInfo::create(array_merge(
-                ['user_id' => $user->id]
-            ));
-
-        Auth::login($user);
-
-        $token = Auth::attempt($request->only('email', 'password'));
-
-         if (!$token) {
-            return $this->serverError('Failed to generate token');
+        } catch (\Throwable $th) {
+            log_error($th);
         }
-
-        return $this->respondWithToken($token, 'Registration successful');
+        
     }
 }
