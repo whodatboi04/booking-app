@@ -24,9 +24,14 @@ Route::group([
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('register', [RegisterController::class, 'register'])->name('register');
 
+    //Google Authentication 
+    Route::get('google', [AuthController::class, 'googleLogin'])->name('auth.google');
+    Route::get('google-callback', [AuthController::class, 'googleAuth'])->name('auth.google-callback');
+
     //Forgot Password
     Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('auth.forgot-password');
     Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])->name('auth.reset-password');
+
 
     Route::group([
         'middleware' => 'auth:api'

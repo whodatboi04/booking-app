@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
@@ -33,12 +34,19 @@ class ForgotPasswordController extends Controller
     //Forgot Password
     public function forgotPassword(ForgotPasswordRequest $request){
 
+        $rateLimiterKey = 'send-message' . $request->email;
+
+        if (RateLimiter::tooManyAttempts($rateLimiterKey, 5)) {
+            $seconds = RateLimiter::availableIn('send-message' . $request->email);
+            return $this->tooManyRequest('Too Many Request. You may try again in ' . $seconds . ' seconds');
+        }
+
+        RateLimiter::increment($rateLimiterKey, 60);
         $hashToken = Hash::make(Str::random(60). 'RESET_PASSWORD');
 
-        $this->updateOrCreateResetToken($request->email, $hashToken);
-
         Mail::to($request->email)->queue(new ForgotPasswordMail($request->email, $hashToken));
-
+        $this->updateOrCreateResetToken($request->email, $hashToken);
+        
         return $this->ok(
                 'Reset Link Sent', 
                 ['token' => $hashToken]

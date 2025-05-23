@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -30,6 +34,31 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    //Google Login 
+    public function googleLogin(){
+        $redirectUrl = Socialite::driver('google')
+            ->stateless()
+            ->redirect()
+            ->getTargetUrl();
+
+        return $this->ok('Success', $redirectUrl);
+    }
+
+    //Google Authentication 
+    public function googleAuth(){
+        try{
+            $googleUser = Socialite::driver('google')->stateless()->user();
+            dd($googleUser);
+            $user = $this->updateOrCreateUser($googleUser);
+            $token = JWTAuth::fromUser($user);
+            return $this->respondWithToken($token);
+        }catch(\Throwable $e){
+            Log::error('Google Auth Failed: ' . $e->getMessage());
+            return $this->serverError('failed');
+        }
+       
+    }
+
     //Get Active User
     public function getUser()
     {
@@ -49,5 +78,17 @@ class AuthController extends Controller
     {
         return $this->respondWithToken(Auth::refresh(), 'Refresh Token');
     }
+
+    /**
+     * 
+     * PRIVATE METHODS 
+     * 
+     */
+
+     private function updateOrCreateUser($userData){
+        $user = User::updateOrCreate([
+
+        ]);
+     }  
     
 }
