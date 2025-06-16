@@ -77,6 +77,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Booking::class);
     }
 
+    //User Gift Certificate Relationship
+    public function gift_certificate(){
+        return $this->belongsToMany(GiftCertificate::class, 'user_gift_certificate')->withTimestamps();
+    }
+
     //Check User Permission
     public function hasPermission($permission){
         $userAbilities = Abilities::getPermissions($this);

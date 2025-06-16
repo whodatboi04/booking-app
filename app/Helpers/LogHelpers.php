@@ -7,7 +7,7 @@ if (! function_exists('log_error')){
         if (config('app.env') === 'production') {
             return Log::error($error->getMessage());
         }
-
+        
         return Log::error($error);
     }
 }

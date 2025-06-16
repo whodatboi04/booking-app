@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
@@ -19,15 +19,15 @@ class ForgotPasswordController extends Controller
     //Update or Create Reset Token
     private function updateOrCreateResetToken(string $email, string $hashedToken){
         DB::table('password_reset_tokens')
-        ->where('email', $email)
-        ->updateOrInsert(
-            ['email' => $email],
-            [
-                'token' => $hashedToken, 
-                'created_at' =>  time_now(), 
-                'expires_in' => time_now()->copy()->addMinutes(2)
-            ]
-        );
+            ->where('email', $email)
+            ->updateOrInsert(
+                ['email' => $email],
+                [
+                    'token' => $hashedToken, 
+                    'created_at' =>  time_now(), 
+                    'expires_in' => time_now()->copy()->addMinutes(2)
+                ]
+            );
 
     }
 

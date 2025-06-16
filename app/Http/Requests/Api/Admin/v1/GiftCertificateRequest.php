@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Client;
+namespace App\Http\Requests\Api\Admin\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BookingRequest extends FormRequest
+class GiftCertificateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,9 @@ class BookingRequest extends FormRequest
     {
         return [
             'room_type_id' => ['required', 'integer'],
-            'discount_id' => ['nullable', 'numeric'],
-            'number_of_persons' => ['required', 'integer'],
+            'name' => ['required', 'string', 'unique:gift_certificates,name'],
+            'description' => ['required', 'string'],
+            'price' => ['required'],
             'start_date' => ['required', 'date', 'before_or_equal:end_date', 'after:'.time_now()],
             'end_date' => ['required', 'date', 'after_or_equal:start_date', 'after:'.time_now()]
         ];

@@ -4,19 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RoomType extends Model
 {
     /** @use HasFactory<\Database\Factories\RoomTypeFactory> */
     use HasFactory;
 
-    public function rooms(){
-        return $this->hasMany(Room::class);
-    }
-
-    public function bookings(){
-        return $this->hasMany(Booking::class);
-    }
+   
 
     public function scopeRoomTypesFilter($query, $filter){
         if(isset($filter['search'])){
@@ -28,5 +23,25 @@ class RoomType extends Model
 
     public function scopeSearchFilter($query, $filter){
         return $query->where('name', 'like', '%' . $filter['search'] . '%');
+    }
+    
+
+    /**
+     * 
+     * RELATIONSHUPS 
+     * 
+     */
+
+     public function gift_certificate()
+     {
+         return $this->hasMany(GiftCertificate::class);
+     }
+
+     public function rooms(){
+        return $this->hasMany(Room::class);
+    }
+
+    public function bookings(){
+        return $this->hasMany(Booking::class);
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\v1\ManageBookingController;
-use App\Http\Controllers\Api\Admin\v1\UserController;
-use App\Http\Controllers\Api\Admin\v1\PermissionRoleController;
-use App\Http\Controllers\Api\Client\BookingController;
-use App\Http\Controllers\Api\Client\RoomController;
-use App\Http\Controllers\Api\Client\RoomTypeController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\v1\Admin\ManageBookingController;
+use App\Http\Controllers\Api\v1\Admin\GiftCertificateController;
+use App\Http\Controllers\Api\v1\Admin\PermissionRoleController;
+use App\Http\Controllers\Api\v1\Admin\UserController;
+use App\Http\Controllers\Api\v1\Client\BookingController;
+use App\Http\Controllers\Api\v1\Client\GiftCertificateController as ClientGiftCertificateController;
+use App\Http\Controllers\Api\v1\Client\RoomTypeController;
+
+
 use Illuminate\Support\Facades\Route;
 
 // API Version 1
@@ -29,7 +31,6 @@ Route::group([
         Route::delete('{user}', [UserController::class, 'deleteUsers'])->name('users.delete');
         Route::delete('{user}/delete', [UserController::class, 'deleteUsersPermanently'])->name('users.delete.permanently');
         Route::put('{user}/restore', [UserController::class, 'restoreDeletedUsers'])->name('users.restore');
-
     });
 
     //Permission 
@@ -47,25 +48,32 @@ Route::group([
     ], function (){
         //Client Booking Route
         Route::post('', [BookingController::class, 'storeBookingAppoinement'])->name('client.booking.store');
-
-        //Admin Booking Route
-        Route::group([
-            'prefix' => 'admin'
-        ], function() {
-            Route::put('{book}', [ManageBookingController::class, 'assignClientRoom'])->name('admin.booking.assign');
-        });
+        Route::get('', [BookingController::class, 'index'])->name('client.booking.index');
     });
 
+    //Client Gift Certificate
+    Route::get('certificate/export-pdf/{certificate}', [ClientGiftCertificateController::class, 'exportPdf'])->name('certificate.export-pdf');
+    Route::apiResource('certificate', ClientGiftCertificateController::class);
+
+    //admin
+    Route::group([
+        'prefix' => 'admin'
+    ], function () {
+        //Manage booking
+        Route::put('/booking/{book}', [ManageBookingController::class, 'assignClientRoom'])->name('admin.booking.assign');
+
+        //Gift Certificate Route
+        Route::apiResource('certificate', GiftCertificateController::class)->names('admin.certificate');
+    });
 });
 
 //PUBLIC ROUTE
-Route::group([
-    'prefix' => '/'
-], function () {
-      //Room Types
-      Route::get('room-types', [RoomTypeController::class, 'roomTypesIndex'])->name('client.room-types.index');
-        
-});
+//Room Types
+Route::get('room-types', [RoomTypeController::class, 'roomTypesIndex'])->name('client.room-types.index');    
+
+
+
+
 
 
 

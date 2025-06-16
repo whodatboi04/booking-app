@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
@@ -35,29 +35,28 @@ class AuthController extends Controller
     }
 
     //Google Login 
-    public function googleLogin(){
-        $redirectUrl = Socialite::driver('google')
-            ->stateless()
-            ->redirect()
-            ->getTargetUrl();
+    // public function googleLogin(){
+    //     $redirectUrl = Socialite::driver('google')
+    //         ->stateless()
+    //         ->redirect()
+    //         ->getTargetUrl();
 
-        return $this->ok('Success', $redirectUrl);
-    }
+    //     return $this->ok('Success', $redirectUrl);
+    // }
 
     //Google Authentication 
-    public function googleAuth(){
-        try{
-            $googleUser = Socialite::driver('google')->stateless()->user();
-            dd($googleUser);
-            $user = $this->updateOrCreateUser($googleUser);
-            $token = JWTAuth::fromUser($user);
-            return $this->respondWithToken($token);
-        }catch(\Throwable $e){
-            Log::error('Google Auth Failed: ' . $e->getMessage());
-            return $this->serverError('failed');
-        }
+    // public function googleAuth(){
+    //     try{
+    //         $googleUser = Socialite::driver('google')->stateless()->user();
+    //         $user = $this->updateOrCreateUser($googleUser);
+    //         $token = JWTAuth::fromUser($user);
+    //         return $this->respondWithToken($token);
+    //     }catch(\Throwable $e){
+    //         Log::error('Google Auth Failed: ' . $e->getMessage());
+    //         return $this->serverError('failed');
+    //     }
        
-    }
+    // }
 
     //Get Active User
     public function getUser()

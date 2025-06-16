@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -13,7 +13,7 @@ class RegisterController extends Controller
 {
     public function register(RegisterRequest $request){
         try {
-            throw \Exception;
+
             $user = User::create($request->validated());
             UserInfo::create(array_merge(
                     ['user_id' => $user->id]

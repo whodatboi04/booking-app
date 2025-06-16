@@ -59,18 +59,18 @@ class BookingService {
 
     
     public function bookAppointmentService($request){
-
+        
         $referenceNo = mt_rand(10000000, 99999999);
         $this->referenceNoExist($referenceNo);
 
-        $isRoomTypeAvailable = $this->checkRoomTypeAvailabilityForDates($request->room_type_id, $request->start_date, $request->end_date);
+        $isRoomTypeAvailable = $this->checkRoomTypeAvailabilityForDates($request['room_type_id'], $request['start_date'], $request['end_date']);
 
         if(!$isRoomTypeAvailable){
             return false;
         }
 
         $book = Booking::create(array_merge(
-            $request->validated(),
+            $request,
             ['user_id' => Auth::user()->id],
             ['reference_no' => $referenceNo]
         ));
