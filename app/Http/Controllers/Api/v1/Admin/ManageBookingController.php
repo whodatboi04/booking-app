@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\v1;
+namespace App\Http\Controllers\Api\v1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\v1\ManageBookingRequest;
@@ -16,10 +16,13 @@ class ManageBookingController extends Controller
     {}
     
     //Assign Client Room
-    public function assignClientRoom(ManageBookingRequest $request, Booking $book){
-        
+    public function assignClientRoom(ManageBookingRequest $request, Booking $book)
+    {
         $assignedRoom = $this->manageBookingService->assignRoomService($request, $book);
+        if (! $assignedRoom) {
+            return $this->conflict('Room Type does not match.');
+        }
         
-        return $this->ok('Assigned Room Successfully', $assignedRoom);
+        return $this->ok('Assigned Room Successfully');
     }
 }

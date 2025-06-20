@@ -12,6 +12,7 @@ class Booking extends Model
         'room_type_id',
         'discount_id',
         'reference_no',
+        'number_of_persons',
         'start_date',
         'end_date',
         'status'
@@ -19,5 +20,13 @@ class Booking extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function room_type(){
+        return $this->belongsTo(RoomType::class);
+    }
+
+    public function room(){
+        return $this->belongsTo(Room::class);
     }
 }

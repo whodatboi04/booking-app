@@ -25,7 +25,8 @@ class RoomTypeRequest extends FormRequest
 
         if($request->routeIs('client.room-types.index')){
             return [
-                'search' => ['nullable', 'string']
+                'search' => ['nullable', 'string'],
+               
             ];
         }
 

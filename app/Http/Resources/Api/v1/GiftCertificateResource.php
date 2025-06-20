@@ -5,7 +5,7 @@ namespace App\Http\Resources\Api\v1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class GiftCertificateResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,13 +15,14 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'username' => $this->username,
-            'email' => $this->email,
-            'firstname' => $this->user_info->firstname,
-            'lastname' => $this->user_info->lastname,
+            'id' => $this->id,
+            'name' => $this->name,
+            'room_type' => $this->room_type->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'roles' => $this->roles->pluck('name')
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Client;
+namespace App\Http\Controllers\Api\v1\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Client\RoomTypeRequest;
@@ -17,6 +17,6 @@ class RoomTypeController extends Controller
             ->roomTypesFilter($request)
             ->paginate(5);
 
-        return RoomTypesResource::collection( $data);
+        return RoomTypesResource::collection($data);
     }
 }

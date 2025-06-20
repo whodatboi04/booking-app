@@ -17,7 +17,31 @@ class BookingService {
     {
         $this->bookedDates =  Booking::all();
     }
+    
+    public function bookAppointmentService($request){
+        
+        $referenceNo = mt_rand(10000000, 99999999);
+        $this->referenceNoExist($referenceNo);
 
+        $isRoomTypeAvailable = $this->checkRoomTypeAvailabilityForDates($request['room_type_id'], $request['start_date'], $request['end_date']);
+        if(!$isRoomTypeAvailable){
+            return false;
+        }
+
+        $book = Booking::create(array_merge(
+            $request,
+            ['user_id' => Auth::user()->id],
+            ['reference_no' => $referenceNo]
+        ));
+
+        return $book;
+    }
+
+    /**
+     * 
+     * PRIVATE FUNCTION 
+     * 
+     */
     private function referenceNoExist($reference_no){
         $reference_no_exist = Booking::where('reference_no', $reference_no)->exists();
         while($reference_no_exist){
@@ -28,14 +52,11 @@ class BookingService {
 
     private function checkRoomTypeAvailabilityForDates($room_type_id, $start_date, $end_date)
     {
-  
-        $roomsOfType = Room::where('room_type_id', $room_type_id)->get(); 
-       
-        foreach ($roomsOfType as $room) {
-            $isRoomAvailable = $this->checkRoomAvailabilityForDates($room->id, $start_date, $end_date);
-            if ($isRoomAvailable) {
-                return true; 
-            }
+        $room = Room::where('room_type_id', $room_type_id)->first(); 
+
+        $isRoomAvailable = $this->checkRoomAvailabilityForDates($room->id, $start_date, $end_date);
+        if ($isRoomAvailable) {
+            return true; 
         }
 
         return false; 
@@ -43,7 +64,6 @@ class BookingService {
 
     private function checkRoomAvailabilityForDates($room_id, $start_date, $end_date)
     {
-
         $conflictingBookings = Booking::where('room_id', $room_id)
             ->where(function($query) use ($start_date, $end_date) {
                 $query->whereBetween('start_date', [$start_date, $end_date])
@@ -53,28 +73,6 @@ class BookingService {
                                 ->where('end_date', '>=', $end_date);
                       });
             })->exists(); 
-
         return !$conflictingBookings;  
-    }
-
-    
-    public function bookAppointmentService($request){
-
-        $referenceNo = mt_rand(10000000, 99999999);
-        $this->referenceNoExist($referenceNo);
-
-        $isRoomTypeAvailable = $this->checkRoomTypeAvailabilityForDates($request->room_type_id, $request->start_date, $request->end_date);
-
-        if(!$isRoomTypeAvailable){
-            return false;
-        }
-
-        $book = Booking::create(array_merge(
-            $request->validated(),
-            ['user_id' => Auth::user()->id],
-            ['reference_no' => $referenceNo]
-        ));
-
-        return $book;
     }
 }

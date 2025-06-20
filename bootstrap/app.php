@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 use Mockery\Exception\InvalidOrderException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -30,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (Exception $e, Request $request) {
-            if ($request->is('api/auth/*')) {
+            if ($request->is('api/auth/*') || $request->is('api/v1/*')  ) {
                 $exceptionMap = [
                     InvalidOrderException::class => [
                         'message' => 'The order you placed is invalid or cannot be processed at this time.',
@@ -60,6 +61,10 @@ return Application::configure(basePath: dirname(__DIR__))
                         'message' => 'The resource you’re trying to access doesn’t exist.',
                         'status' => 404
                     ],
+                    ValidationException::class => [
+                        'message' => $e->getMessage(),
+                        'status' => 422
+                    ]
                 ];    
                 foreach ($exceptionMap as $class => $details) {
                     if ($e instanceof $class) {
