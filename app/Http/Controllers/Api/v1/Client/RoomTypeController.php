@@ -17,6 +17,6 @@ class RoomTypeController extends Controller
             ->roomTypesFilter($request)
             ->paginate(5);
 
-        return RoomTypesResource::collection( $data);
+        return RoomTypesResource::collection($data);
     }
 }

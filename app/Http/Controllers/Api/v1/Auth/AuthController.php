@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\Api\v1\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -61,7 +62,7 @@ class AuthController extends Controller
     //Get Active User
     public function getUser()
     {
-        return response()->json(Auth::user());
+        return $this->ok('Success', new UserResource(Auth::user()));
     }
 
     //Logout

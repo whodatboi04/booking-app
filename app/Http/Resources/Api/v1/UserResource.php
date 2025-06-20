@@ -17,6 +17,8 @@ class UserResource extends JsonResource
         return [
             'username' => $this->username,
             'email' => $this->email,
+            'firstname' => $this->user_info->firstname,
+            'lastname' => $this->user_info->lastname,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'roles' => $this->roles->pluck('name')

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\Admin\ManageBookingController;
 use App\Http\Controllers\Api\v1\Admin\GiftCertificateController;
 use App\Http\Controllers\Api\v1\Admin\PermissionRoleController;
+use App\Http\Controllers\Api\v1\Admin\RoomController;
 use App\Http\Controllers\Api\v1\Admin\UserController;
 use App\Http\Controllers\Api\v1\Client\BookingController;
 use App\Http\Controllers\Api\v1\Client\GiftCertificateController as ClientGiftCertificateController;
@@ -64,6 +65,9 @@ Route::group([
 
         //Gift Certificate Route
         Route::apiResource('certificate', GiftCertificateController::class)->names('admin.certificate');
+
+        //Room Route
+        Route::apiResource('room', RoomController::class)->names('admin');
     });
 });
 

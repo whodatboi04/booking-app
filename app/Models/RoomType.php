@@ -10,7 +10,12 @@ class RoomType extends Model
 {
     /** @use HasFactory<\Database\Factories\RoomTypeFactory> */
     use HasFactory;
-
+    
+    protected $fillable = [
+        'name',
+        'price',
+        'available_slot'
+    ];
    
 
     public function scopeRoomTypesFilter($query, $filter){
@@ -18,11 +23,20 @@ class RoomType extends Model
             $query->searchFilter($filter);
         }
 
+        if (isset($filter['persons'])) {
+            $query->filterByPersons($filter);
+        }
+
         return $query;
     }
 
     public function scopeSearchFilter($query, $filter){
         return $query->where('name', 'like', '%' . $filter['search'] . '%');
+    }
+
+    public function scopeFilterByPersons($query, $filter) 
+    {
+        $query->where('room_capacity', '>=', $filter['persons']);
     }
     
 
@@ -37,11 +51,13 @@ class RoomType extends Model
          return $this->hasMany(GiftCertificate::class);
      }
 
-     public function rooms(){
+     public function rooms()
+    {
         return $this->hasMany(Room::class);
     }
 
-    public function bookings(){
+    public function bookings()
+    {
         return $this->hasMany(Booking::class);
     }
 }

@@ -28,7 +28,7 @@ class BookingController extends Controller
 
         $book = $this->bookingService->bookAppointmentService($request->validated());
 
-        if(!$book){
+        if (! $book) {
             return $this->badRequest('Room Type is Fully Booked');
         }
         
