@@ -10,16 +10,19 @@ class RoomType extends Model
 {
     /** @use HasFactory<\Database\Factories\RoomTypeFactory> */
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
         'price',
-        'available_slot'
+        'room_capacity',
+        'room_image',
+        'description'
     ];
-   
 
-    public function scopeRoomTypesFilter($query, $filter){
-        if(isset($filter['search'])){
+
+    public function scopeRoomTypesFilter($query, $filter)
+    {
+        if (isset($filter['search'])) {
             $query->searchFilter($filter);
         }
 
@@ -30,15 +33,16 @@ class RoomType extends Model
         return $query;
     }
 
-    public function scopeSearchFilter($query, $filter){
+    public function scopeSearchFilter($query, $filter)
+    {
         return $query->where('name', 'like', '%' . $filter['search'] . '%');
     }
 
-    public function scopeFilterByPersons($query, $filter) 
+    public function scopeFilterByPersons($query, $filter)
     {
         $query->where('room_capacity', '>=', $filter['persons']);
     }
-    
+
 
     /**
      * 
@@ -46,12 +50,12 @@ class RoomType extends Model
      * 
      */
 
-     public function gift_certificate()
-     {
-         return $this->hasMany(GiftCertificate::class);
-     }
+    public function gift_certificate()
+    {
+        return $this->hasMany(GiftCertificate::class);
+    }
 
-     public function rooms()
+    public function rooms()
     {
         return $this->hasMany(Room::class);
     }

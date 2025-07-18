@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Http\Resources\Api\v1\PaginatorResource;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 trait ApiResponse
 {
@@ -27,32 +30,84 @@ trait ApiResponse
     public const BAD_GATEWAY = 502;
     public const GATEWAY_TIMEOUT = 504;
 
-    protected function ok($message, $data = []){ return $this->response($message, SELF::OK, $data);}
-    protected function created($message, $data = []){ return $this->response($message, SELF::CREATED, $data);}
-    protected function accepted($message, $data = []){ return $this->response($message, SELF::ACCEPTED, $data);}
-    protected function noContent($message = 'No Content', $data = []){ return $this->response($message, SELF::NO_CONTENT, $data);}
+    protected function ok($message, $data = [])
+    {
+        return $this->response($message, SELF::OK, $data);
+    }
+    protected function created($message, $data = [])
+    {
+        return $this->response($message, SELF::CREATED, $data);
+    }
+    protected function accepted($message, $data = [])
+    {
+        return $this->response($message, SELF::ACCEPTED, $data);
+    }
+    protected function noContent($message = 'No Content', $data = [])
+    {
+        return $this->response($message, SELF::NO_CONTENT, $data);
+    }
 
-    protected function badRequest($message, $data = []){ return $this->response($message, SELF::BAD_REQUEST, $data);}
-    protected function unauthorized($message, $data = []){ return $this->response($message, SELF::UNAUTHORIZED, $data);}
-    protected function forbidden($message, $data = []){ return $this->response($message, SELF::FORBIDDEN, $data);}
-    protected function notFound($message, $data = []){ return $this->response($message, SELF::NOT_FOUND, $data);}
-    protected function methodNotAllowed($message, $data = []){ return $this->response($message, SELF::METHOD_NOT_ALLOWED, $data);}
-    protected function tooManyRequest($message, $data = []){ return $this->response($message, SELF::TOO_MANY_REQUESTS, $data);}
-    protected function unprocessable($message, $data = []){ return $this->response($message, SELF::UNPROCESSABLE, $data);}
-    protected function conflict($message, $data = []){ return $this->response($message, SELF::CONFLICT, $data);}
+    protected function badRequest($message, $data = [])
+    {
+        return $this->response($message, SELF::BAD_REQUEST, $data);
+    }
+    protected function unauthorized($message, $data = [])
+    {
+        return $this->response($message, SELF::UNAUTHORIZED, $data);
+    }
+    protected function forbidden($message, $data = [])
+    {
+        return $this->response($message, SELF::FORBIDDEN, $data);
+    }
+    protected function notFound($message, $data = [])
+    {
+        return $this->response($message, SELF::NOT_FOUND, $data);
+    }
+    protected function methodNotAllowed($message, $data = [])
+    {
+        return $this->response($message, SELF::METHOD_NOT_ALLOWED, $data);
+    }
+    protected function tooManyRequest($message, $data = [])
+    {
+        return $this->response($message, SELF::TOO_MANY_REQUESTS, $data);
+    }
+    protected function unprocessable($message, $data = [])
+    {
+        return $this->response($message, SELF::UNPROCESSABLE, $data);
+    }
+    protected function conflict($message, $data = [])
+    {
+        return $this->response($message, SELF::CONFLICT, $data);
+    }
 
-    protected function serverError($message, $data = []){ return $this->response($message, SELF::SERVER_ERROR, $data);}
-    protected function badGateWay($message, $data = []){ return $this->response($message, SELF::BAD_GATEWAY, $data);}
-    protected function gatewayTimeout($message, $data = []){ return $this->response($message, SELF::GATEWAY_TIMEOUT, $data);}
-    
+    protected function serverError($message, $data = [])
+    {
+        return $this->response($message, SELF::SERVER_ERROR, $data);
+    }
+    protected function badGateWay($message, $data = [])
+    {
+        return $this->response($message, SELF::BAD_GATEWAY, $data);
+    }
+    protected function gatewayTimeout($message, $data = [])
+    {
+        return $this->response($message, SELF::GATEWAY_TIMEOUT, $data);
+    }
+
     public function response($message, $statusCode, $data = [])
     {
         $response['status'] = $statusCode;
         $response['message'] = $message;
+
+        if ($data instanceof ResourceCollection && $data->resource instanceof LengthAwarePaginator) {
+            $paginator = $data->resource;
+            $response["data"] = $data->items();
+            $response["pagination"] = new PaginatorResource($paginator);
+        }
+
         if (!empty($data)) {
-            if($statusCode < 400){
+            if ($statusCode < 400) {
                 $response['data'] = $data;
-            }else{
+            } else {
                 $response['error'] = $data;
             }
         }
