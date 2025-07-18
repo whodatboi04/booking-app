@@ -20,7 +20,7 @@ Route::group([
     'prefix' => 'auth'
 
 ], function () {
-    
+
     //Login and Register
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('register', [RegisterController::class, 'register'])->name('register');
@@ -41,9 +41,7 @@ Route::group([
         Route::get('refresh', [AuthController::class, 'refresh'])->name('refresh');
         Route::get('getUser', [AuthController::class, 'getUser'])->name('getuser');
     });
-
 });
 
 //Profile
 Route::put('profile', [UserInfoController::class, 'updateUserInfo'])->middleware('auth:api')->name('profile.store');
-

@@ -17,9 +17,9 @@ class AuthController extends Controller
     //Login
     public function login(LoginRequest $request)
     {
-        if(!filter_var($request->email, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             $request->merge([
-                'username' => $request->email, 
+                'username' => $request->email,
                 'email' => null
             ]);
         }
@@ -36,7 +36,8 @@ class AuthController extends Controller
     }
 
     //Google Login 
-    // public function googleLogin(){
+    // public function googleLogin()
+    // {
     //     $redirectUrl = Socialite::driver('google')
     //         ->stateless()
     //         ->redirect()
@@ -45,18 +46,18 @@ class AuthController extends Controller
     //     return $this->ok('Success', $redirectUrl);
     // }
 
-    //Google Authentication 
-    // public function googleAuth(){
-    //     try{
+    // // Google Authentication 
+    // public function googleAuth()
+    // {
+    //     try {
     //         $googleUser = Socialite::driver('google')->stateless()->user();
     //         $user = $this->updateOrCreateUser($googleUser);
     //         $token = JWTAuth::fromUser($user);
     //         return $this->respondWithToken($token);
-    //     }catch(\Throwable $e){
+    //     } catch (\Throwable $e) {
     //         Log::error('Google Auth Failed: ' . $e->getMessage());
     //         return $this->serverError('failed');
     //     }
-       
     // }
 
     //Get Active User
@@ -85,10 +86,8 @@ class AuthController extends Controller
      * 
      */
 
-     private function updateOrCreateUser($userData){
-        $user = User::updateOrCreate([
-
-        ]);
-     }  
-    
+    private function updateOrCreateUser($userData)
+    {
+        $user = User::updateOrCreate([]);
+    }
 }

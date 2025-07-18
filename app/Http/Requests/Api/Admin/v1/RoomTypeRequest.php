@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Api\Client;
+namespace App\Http\Requests\Api\Admin\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
 class RoomTypeRequest extends FormRequest
 {
@@ -20,19 +19,14 @@ class RoomTypeRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(Request $request): array
+    public function rules(): array
     {
-
-        if ($request->routeIs('client.room-types.index')) {
-            return [
-                'search' => ['nullable', 'string'],
-                'persons' => ['nullable', 'integer'],
-                'perPage' => ['nullable', 'integer']
-            ];
-        }
-
         return [
-            //
+            'name' => ['required'],
+            'price' => ['required'],
+            'room_capacity' => ['required'],
+            'description' => ['required'],
+            'room_image' => ['required', 'image', 'mimes:jpeg,jpg,png']
         ];
     }
 }
