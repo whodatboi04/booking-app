@@ -3,19 +3,21 @@
 namespace App\Services\Api\Admin\v1;
 
 use App\Models\Booking;
+use App\Models\Room;
 
-class ManageBookingService {
-
+class ManageBookingService
+{
+    /**
+     * Check if the room_id has the same room type that user booked 
+     */
     public function assignRoomService($request, $book)
     {
-        $roomType = $book->where('room_type_id', $request['room_id'])->first();
- 
-        if (! $roomType) {
+        $room = Room::findOrFail($request['room_id']);
+
+        if ($room->room_type_id !== $book->room_type_id) {
             return false;
         }
-        $assignRoom = $book->update(['room_id' => $request->validated('room_id')]);
-  
-        return $assignRoom;
 
+        return $book->update(['room_id' => $room->id]);
     }
 }

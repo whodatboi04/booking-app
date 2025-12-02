@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Api\v1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\v1\RoomTypeRequest;
-use App\Http\Resources\Api\v1\RoomTypesResource;
+use App\Http\Resources\v1\Client\RoomTypesResource;
 use App\Models\RoomType;
+use App\Services\Api\UploadFileService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class RoomTypeController extends Controller
 {
+
+    public function __construct(private UploadFileService $uploadFile) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -27,15 +30,10 @@ class RoomTypeController extends Controller
         $validated = $request->validated();
 
         $roomImage = $request->file('room_image');
-        $fileRenamed = now()->format('Y-m-d') . '_' . $roomImage->hashName();
         $fileLocation = 'public/rooms';
-        $path = $roomImage->storeAs($fileLocation, $fileRenamed);
+        $file = $this->uploadFile->uploadImage($roomImage, $fileLocation);
 
-        if (! $path) {
-            return $this->notFound('File Path Not Found');
-        }
-
-        $validated['room_image'] = $fileRenamed;
+        $validated['room_image'] =  $file;
 
         $data = RoomType::create($validated);
 

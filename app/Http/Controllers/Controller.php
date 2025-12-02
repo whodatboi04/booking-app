@@ -15,24 +15,10 @@ abstract class Controller
     protected function respondWithToken($token, $msg = 'Login Successfully')
     {
         return $this->ok($msg,
-        [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
-        ]);
-    }
-
-    //Checks parameters with include
-    public function include(string $relation) : bool 
-    {
-        $param = request()->get('include');
-
-        if(!isset($param)){
-            return false;
-        }
-
-        $includeValues = explode(',', strtolower($param));
-
-        return in_array(strtolower($relation), $includeValues);
+            [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => 1000000
+            ]);
     }
 }

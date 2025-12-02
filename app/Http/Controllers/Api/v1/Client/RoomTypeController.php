@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api\v1\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Client\RoomTypeRequest;
-use App\Http\Resources\Api\v1\RoomTypesResource;
+use App\Http\Resources\v1\Client\RoomTypesResource;
 use App\Models\RoomType;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class RoomTypeController extends Controller
@@ -23,11 +22,11 @@ class RoomTypeController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate($perPage);
 
-        $rooms = RoomTypesResource::collection($data);
-        foreach ($rooms as $room) {
-            $url = Storage::url('rooms/' . $room->room_image);
-            $room->room_image = config('app.url') . $url;
-        }
         return $this->ok('Success', RoomTypesResource::collection($data));
+    }
+
+    public function show(RoomType $roomType)
+    {
+        return $this->ok('Success', new RoomTypesResource($roomType));
     }
 }

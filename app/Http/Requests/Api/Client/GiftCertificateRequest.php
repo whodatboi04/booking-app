@@ -22,7 +22,7 @@ class GiftCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'gift_certificate_id' => ['required', 'integer']
+            'promo_code' => ['required', 'string']
         ];
     }
 }

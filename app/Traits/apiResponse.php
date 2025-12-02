@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Http\Resources\Api\v1\PaginatorResource;
+use App\Http\Resources\v1\PaginatorResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

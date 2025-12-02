@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Api\v1;
+namespace App\Http\Resources\v1\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GiftCertificateResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +17,7 @@ class GiftCertificateResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'room_type' => $this->room_type->name,
-            'description' => $this->description,
-            'price' => $this->price,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+            'label' => $this->label,
             'created_at' => $this->created_at,
         ];
     }

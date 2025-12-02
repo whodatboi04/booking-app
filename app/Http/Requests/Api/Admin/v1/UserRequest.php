@@ -23,20 +23,32 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        if (Route::is('users.store')){
+        if (Route::is('users.index')) {
+            return [
+                'search' => ['nullable', 'string'],
+                'role' => ['nullable', 'integer'],
+                'status' => ['nullable', 'integer'],
+                'perPage' => ['nullable', 'integer']
+            ];
+        }
+
+        if (Route::is('users.store')) {
             return [
                 'username' => ['required', 'string', 'unique:users,username'],
                 'email' => ['required', 'string', 'email', 'unique:users,email'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'password_confirmation' => ['required', 'string'],
+                'firstname' => ['required', 'string'],
+                'lastname' => ['required', 'string'],
+                'phone' => ['required', 'string'],
+                'birthdate' => ['required', 'date'],
                 //Roles Object
-                'roles.superadmin' => ['nullable', 'integer'],
-                'roles.admin' => ['nullable', 'integer'],
-                'roles.user' => ['nullable', 'integer']
+                'roles' => ['required', 'array'],
+                'roles.*' => ['required', 'integer']
             ];
         }
 
-        elseif (Route::is('users.update')){
+        if (Route::is('users.update')) {
             return [
                 'username' => ['sometimes', 'string', 'unique:users,username'],
                 'email' => ['sometimes', 'string', 'email', 'unique:users,email'],
@@ -46,10 +58,6 @@ class UserRequest extends FormRequest
                 'roles.admin' => ['nullable', 'integer'],
                 'roles.user' => ['nullable', 'integer']
             ];
-        }
-
-        else {
-            throw ValidationException::withMessages(['Invalid Route']);
         }
     }
 }

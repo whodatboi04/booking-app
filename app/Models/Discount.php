@@ -9,4 +9,16 @@ class Discount extends Model
 {
     /** @use HasFactory<\Database\Factories\DiscountFactory> */
     use HasFactory;
+
+
+
+    /**
+     * 
+     * RELATIONSHIPS 
+     * 
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

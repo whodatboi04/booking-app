@@ -13,6 +13,11 @@ class RoomSeeder extends Seeder
      */
     public function run(): void
     {
-        Room::factory(10)->create();
+        foreach (range(1, 10) as $roomNo) {
+            Room::factory()->create([
+                'room_no' => $roomNo,
+                'room_type_id' => fake()->numberBetween(1, 5)
+            ]);
+        }
     }
 }

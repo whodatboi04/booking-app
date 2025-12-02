@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Api\v1;
+namespace App\Http\Resources\v1\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoomTypesResource extends JsonResource
+class PaymentMethodResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,9 @@ class RoomTypesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'name' => $this->name,
-            'price' => $this->price,
-            'room_capacity' => $this->room_capacity,
-            'description' => $this->description,
-            'room_image' => $this->room_image ?? ''
+            'status' => $this->status,
+            'created_at' => $this->created_at
         ];
     }
 }

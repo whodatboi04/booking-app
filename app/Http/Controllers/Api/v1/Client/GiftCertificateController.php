@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class GiftCertificateController extends Controller
 {
 
-    public function __construct(private ExportPdfService $pdfService){}
+    public function __construct(private ExportPdfService $pdfService) {}
 
     /**
      * Display a listing of the resource.
@@ -33,7 +33,7 @@ class GiftCertificateController extends Controller
         $validated = $request->validated();
         $user = Auth::user();
 
-        $giftCert = GiftCertificate::findOrFail($validated['gift_certificate_id']);
+        $giftCert = GiftCertificate::where('name', $validated['promo_code'])->first();
         if ($giftCert->user()->where('user_id', $user->id)->exists()) {
             return $this->conflict('You already claimed gift certificate');
         }
@@ -45,7 +45,7 @@ class GiftCertificateController extends Controller
         $validated['reference_no'] = $ref;
 
         $giftCert->user()->attach($user->id, ['reference_no' => $validated['reference_no']]);
-        
+
         return $this->created('Gift Certificate Successfully Claimed', $giftCert);
     }
 
@@ -57,7 +57,7 @@ class GiftCertificateController extends Controller
         //
     }
 
-   
+
 
     /**
      * Update the specified resource in storage.
@@ -75,7 +75,7 @@ class GiftCertificateController extends Controller
         //
     }
 
-     /** 
+    /** 
      * Download PDF 
      */
     public function exportPdf(GiftCertificate $certificate)
@@ -89,4 +89,4 @@ class GiftCertificateController extends Controller
 
         return $this->pdfService->giftCertificate($certificate, $user);
     }
-} 
+}
