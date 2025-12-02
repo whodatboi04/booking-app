@@ -23,10 +23,15 @@ class BookingRequest extends FormRequest
     {
         return [
             'room_type_id' => ['required', 'integer'],
-            'discount_id' => ['nullable', 'numeric'],
+            'discount_id' => ['nullable', 'integer'],
+            'firstname' => ['required', 'string'],
+            'middlename' => ['nullable', 'string'],
+            'lastname' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'discount_id_picture' => ['nullable', 'image', 'mimes:png,jpg,jpeg'],
             'number_of_persons' => ['required', 'integer'],
-            'start_date' => ['required', 'date', 'before_or_equal:end_date', 'after:'.time_now()],
-            'end_date' => ['required', 'date', 'after_or_equal:start_date', 'after:'.time_now()]
+            'start_date' => ['required', 'date', 'before_or_equal:end_date', 'after:' . time_now()],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date', 'after:' . time_now()]
         ];
     }
 

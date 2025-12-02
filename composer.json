@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.2",
         "codedge/laravel-fpdf": "^1.12",
+        "dracarys/jwt": "^1.0",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.20",

@@ -4,13 +4,9 @@ namespace App\Http\Controllers\Api\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Resources\Api\v1\UserResource;
+use App\Http\Resources\v1\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Laravel\Socialite\Facades\Socialite;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -35,7 +31,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    //Google Login 
+    //Google Login
     // public function googleLogin()
     // {
     //     $redirectUrl = Socialite::driver('google')
@@ -46,7 +42,7 @@ class AuthController extends Controller
     //     return $this->ok('Success', $redirectUrl);
     // }
 
-    // // Google Authentication 
+    // // Google Authentication
     // public function googleAuth()
     // {
     //     try {
@@ -81,13 +77,8 @@ class AuthController extends Controller
     }
 
     /**
-     * 
-     * PRIVATE METHODS 
-     * 
+     *
+     * PRIVATE METHODS
+     *
      */
-
-    private function updateOrCreateUser($userData)
-    {
-        $user = User::updateOrCreate([]);
-    }
 }

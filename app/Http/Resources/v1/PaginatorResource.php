@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Api\v1;
+namespace App\Http\Resources\v1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,7 +18,7 @@ class PaginatorResource extends JsonResource
 
         return [
             'current_page' => $paginator->currentPage(),
-            // 'data' => $this->resource->items(),
+//            'data' => $this->resource->items(),
             'first_page_url' => $paginator->url(1),
             'from' => $paginator->firstItem(),
             'last_page' => $paginator->lastPage(),

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->double('percentage');
             $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

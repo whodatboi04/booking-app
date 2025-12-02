@@ -17,7 +17,7 @@ class UserInfoController extends Controller
 
             $userActiveInfo = UserInfo::where('user_id', Auth::user()->id)->first();
             
-            if(!$userActiveInfo){
+            if (! $userActiveInfo) {
                 return $this->unauthorized('Invalid User');
             }
 

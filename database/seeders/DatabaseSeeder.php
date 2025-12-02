@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-       $user = User::factory()->create([
+        $user = User::factory()->create([
             'username' => 'testuser',
             'email' => 'test@example.com',
-        ]);  
+        ]);
 
         $user->user_info()
             ->create([
@@ -36,10 +36,9 @@ class DatabaseSeeder extends Seeder
             UserRoleSeeder::class,
             RolePermissionSeeder::class,
             RoomTypeSeeder::class,
-            // RoomSeeder::class,
-            DiscountSeeder::class
+            RoomSeeder::class,
+            DiscountSeeder::class,
+            PaymentMethodSeeder::class
         ]);
-
-        
     }
 }
