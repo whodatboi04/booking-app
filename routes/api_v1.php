@@ -13,7 +13,6 @@ use App\Http\Controllers\Api\v1\Client\BookingController;
 use App\Http\Controllers\Api\v1\Client\GiftCertificateController as ClientGiftCertificateController;
 use App\Http\Controllers\Api\v1\Client\PaymentController;
 use App\Http\Controllers\Api\v1\Client\RoomTypeController;
-use App\Http\Controllers\Api\v1\Admin\UserInfoController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -28,15 +27,12 @@ Route::group([
         'prefix' => 'admin'
     ], function () {
 
-        // USER INFO
-        Route::apiResource('user-info', UserInfoController::class);
-
         //Manage booking
-        Route::prefix('booking')->controller(ManageBookingController::class)->group(function () {
+        Route::prefix('bookings')->controller(ManageBookingController::class)->group(function () {
             Route::get('/', 'index')->name('admin.booking.index');
+            Route::get('{book}', 'show')->name('admin.booking.show');
             Route::put('{book}', 'assignClientRoom')->name('admin.booking.assign');
         });
-
 
         //Gift Certificate Route
         Route::apiResource('certificate', GiftCertificateController::class)->names('admin.certificate');
