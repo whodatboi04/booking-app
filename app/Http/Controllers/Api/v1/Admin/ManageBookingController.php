@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Admin\v1\IndexManageBookingRequest;
 use App\Http\Requests\Api\Admin\v1\ManageBookingRequest;
 use App\Http\Resources\v1\Admin\BookingResource;
 use App\Models\Booking;
@@ -14,9 +15,22 @@ class ManageBookingController extends Controller
         protected ManageBookingService $manageBookingService
     ) {}
 
-    public function index()
+    public function index(IndexManageBookingRequest $request)
     {
-        return BookingResource::collection(Booking::all());
+        $validated = $request->validated();
+        $perPage = $validated["per_page"] ?? 10;
+
+        $booking = Booking::query()
+            ->bookingFilter($validated)
+            ->orderBy('created_at', 'DESC')
+            ->paginate($perPage);
+
+        return $this->ok("Successfully fetched", BookingResource::collection($booking));
+    }
+
+    public function show(Booking $book)
+    {
+        return $this->ok("Successfully fetched", new BookingResource($book));
     }
 
     //Assign Client Room

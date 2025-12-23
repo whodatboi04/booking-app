@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\v1\RoomTypeRequest;
+use App\Http\Resources\v1\Admin\RoomTypeResource;
 use App\Http\Resources\v1\Client\RoomTypesResource;
 use App\Models\RoomType;
 use App\Services\Api\UploadFileService;
@@ -19,7 +20,8 @@ class RoomTypeController extends Controller
      */
     public function index()
     {
-        //
+        $roomTypes = RoomType::paginate(10);
+        return $this->ok('Successfully fetched', RoomTypeResource::collection($roomTypes));
     }
 
     /**
@@ -43,9 +45,10 @@ class RoomTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $roomType = RoomType::with('rooms')->findOrFail($id);
+        return $this->ok('Successfully fetched', new RoomTypeResource($roomType));
     }
 
 
